@@ -1,8 +1,9 @@
-export function generateEmptySoundData(model: {
+import { getDurationInSamples } from "./utils/get_duration_in_samples";
+
+export function generateSilence(model: {
     durationMs: number;
     sampleRate: number;
 }): Float32Array {
     const { durationMs, sampleRate } = model;
-    const durationSamples = (durationMs / 1000) * sampleRate;
-    return new Float32Array(durationSamples);
+    return new Float32Array(getDurationInSamples({ durationMs, sampleRate }));
 }

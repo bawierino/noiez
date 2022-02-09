@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateEmptySoundData = void 0;
-function generateEmptySoundData(model) {
+exports.generateSilence = void 0;
+const get_duration_in_samples_1 = require("./utils/get_duration_in_samples");
+function generateSilence(model) {
     const { durationMs, sampleRate } = model;
-    const durationSamples = (durationMs / 1000) * sampleRate;
-    return new Float32Array(durationSamples);
+    return new Float32Array((0, get_duration_in_samples_1.getDurationInSamples)({ durationMs, sampleRate }));
 }
-exports.generateEmptySoundData = generateEmptySoundData;
+exports.generateSilence = generateSilence;
