@@ -1,4 +1,5 @@
 import fs from "fs";
+import { join } from "path";
 import WavEncoder from "wav-encoder";
 import { concatSounds } from "./sound_data_manipulation/concat_sounds";
 import { lowPassFilter } from "./sound_data_manipulation/low_pass_filter";
@@ -75,5 +76,11 @@ const audioData = {
 };
 
 WavEncoder.encode(audioData).then(async (buffer: ArrayBuffer) => {
-    fs.writeFileSync("sound.wav", Buffer.from(buffer));
+    const rendersFolderPath = join(__dirname, "..", "renders");
+
+    if (!fs.existsSync(rendersFolderPath)) {
+        fs.mkdirSync(rendersFolderPath);
+    }
+
+    fs.writeFileSync(join(rendersFolderPath, "sound.wav"), Buffer.from(buffer));
 });

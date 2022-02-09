@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sampleRate = void 0;
 const fs_1 = __importDefault(require("fs"));
+const path_1 = require("path");
 const wav_encoder_1 = __importDefault(require("wav-encoder"));
 const concat_sounds_1 = require("./sound_data_manipulation/concat_sounds");
 const low_pass_filter_1 = require("./sound_data_manipulation/low_pass_filter");
@@ -85,5 +86,9 @@ const audioData = {
     ],
 };
 wav_encoder_1.default.encode(audioData).then((buffer) => __awaiter(void 0, void 0, void 0, function* () {
-    fs_1.default.writeFileSync("sound.wav", Buffer.from(buffer));
+    const rendersFolderPath = (0, path_1.join)(__dirname, "..", "renders");
+    if (!fs_1.default.existsSync(rendersFolderPath)) {
+        fs_1.default.mkdirSync(rendersFolderPath);
+    }
+    fs_1.default.writeFileSync((0, path_1.join)(rendersFolderPath, "sound.wav"), Buffer.from(buffer));
 }));
