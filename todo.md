@@ -4,6 +4,8 @@ decay
 small pitch modulation downwards
 bit more click
 
+bassdrop
+
 snare
 
 research hihat
