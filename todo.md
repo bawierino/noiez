@@ -1,4 +1,8 @@
 bassdrum
+tone
+decay
+small pitch modulation downwards
+bit more click
 
 snare
 
