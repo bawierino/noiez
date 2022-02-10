@@ -9,6 +9,7 @@ import { generateSawtoothWave } from "./sound_generators/pitched_sound_generator
 import { generateSineWave } from "./sound_generators/pitched_sound_generators/generate_sine_wave";
 import { generateSquareWave } from "./sound_generators/pitched_sound_generators/generate_square_wave";
 import { generateTriangleWave } from "./sound_generators/pitched_sound_generators/generate_triangle_wave";
+import { adsr } from "./sound_manipulation/adsr";
 
 export const sampleRate = 44100;
 
@@ -16,37 +17,32 @@ const audioData = {
     sampleRate,
     channelData: [
         concatSounds([
-            lowPassFilter({
-                sound: mixSounds([
-                    generateSineWave({
-                        sampleRate,
-                        frequencyProvider: () => 440,
-                        durationMs: 1000,
-                        amplitudeProvider: () => 1,
-                    }),
-                    generateTriangleWave({
-                        sampleRate,
-                        frequencyProvider: () => 600,
-                        durationMs: 1500,
-                        amplitudeProvider: () => 1,
-                    }),
-                ]),
-                cutoffGenerator: (currentTimeMs) =>
-                    Math.max(0.5 - 0.0004 * currentTimeMs, 0),
-                sampleRate,
-            }),
             mixSounds([
                 generateSineWave({
                     sampleRate,
                     frequencyProvider: () => 440,
-                    durationMs: 1000,
-                    amplitudeProvider: () => 1,
+                    durationMs: 3000,
+                    amplitudeProvider: (currentTimeMs) =>
+                        adsr({
+                            currentTimeMs,
+                            attack: 500,
+                            decay: 1500,
+                            sustain: 0.6,
+                            release: 300,
+                        }),
                 }),
                 generateTriangleWave({
                     sampleRate,
-                    frequencyProvider: () => 600,
-                    durationMs: 1500,
-                    amplitudeProvider: () => 1,
+                    frequencyProvider: () => 440,
+                    durationMs: 3000,
+                    amplitudeProvider: (currentTimeMs) =>
+                        adsr({
+                            currentTimeMs,
+                            attack: 500,
+                            decay: 1500,
+                            sustain: 0.6,
+                            release: 300,
+                        }),
                 }),
             ]),
             generateSawtoothWave({

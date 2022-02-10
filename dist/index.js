@@ -24,41 +24,36 @@ const generate_sawtooth_wave_1 = require("./sound_generators/pitched_sound_gener
 const generate_sine_wave_1 = require("./sound_generators/pitched_sound_generators/generate_sine_wave");
 const generate_square_wave_1 = require("./sound_generators/pitched_sound_generators/generate_square_wave");
 const generate_triangle_wave_1 = require("./sound_generators/pitched_sound_generators/generate_triangle_wave");
+const adsr_1 = require("./sound_manipulation/adsr");
 exports.sampleRate = 44100;
 const audioData = {
     sampleRate: exports.sampleRate,
     channelData: [
         (0, concat_sounds_1.concatSounds)([
-            (0, low_pass_filter_1.lowPassFilter)({
-                sound: (0, mix_sounds_1.mixSounds)([
-                    (0, generate_sine_wave_1.generateSineWave)({
-                        sampleRate: exports.sampleRate,
-                        frequencyProvider: () => 440,
-                        durationMs: 1000,
-                        amplitudeProvider: () => 1,
-                    }),
-                    (0, generate_triangle_wave_1.generateTriangleWave)({
-                        sampleRate: exports.sampleRate,
-                        frequencyProvider: () => 600,
-                        durationMs: 1500,
-                        amplitudeProvider: () => 1,
-                    }),
-                ]),
-                cutoffGenerator: (currentTimeMs) => Math.max(0.5 - 0.0004 * currentTimeMs, 0),
-                sampleRate: exports.sampleRate,
-            }),
             (0, mix_sounds_1.mixSounds)([
                 (0, generate_sine_wave_1.generateSineWave)({
                     sampleRate: exports.sampleRate,
                     frequencyProvider: () => 440,
-                    durationMs: 1000,
-                    amplitudeProvider: () => 1,
+                    durationMs: 3000,
+                    amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
+                        currentTimeMs,
+                        attack: 500,
+                        decay: 1500,
+                        sustain: 0.6,
+                        release: 300,
+                    }),
                 }),
                 (0, generate_triangle_wave_1.generateTriangleWave)({
                     sampleRate: exports.sampleRate,
-                    frequencyProvider: () => 600,
-                    durationMs: 1500,
-                    amplitudeProvider: () => 1,
+                    frequencyProvider: () => 440,
+                    durationMs: 3000,
+                    amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
+                        currentTimeMs,
+                        attack: 500,
+                        decay: 1500,
+                        sustain: 0.6,
+                        release: 300,
+                    }),
                 }),
             ]),
             (0, generate_sawtooth_wave_1.generateSawtoothWave)({
