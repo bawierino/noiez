@@ -8,19 +8,25 @@ import { generateSineWave } from "../pitched_sound_generators/generate_sine_wave
 export function generateKick(model: SoundGenerationModel): Float32Array {
     const { durationMs, amplitudeProvider, sampleRate } = model;
 
+    const attack = 1;
+    const decay = 30;
+    const release = 20;
+    const sustain = 0.8;
+    const kickDuration = attack + decay + release;
+
     return mixSounds([
         generateSilence({ durationMs, sampleRate }),
         generateSineWave({
-            durationMs: 51,
+            durationMs: kickDuration,
             frequencyProvider: () => 80,
             sampleRate,
             amplitudeProvider: (currentTimeMs) =>
                 adsr({
-                    attack: 1,
+                    attack,
                     currentTimeMs,
-                    decay: 30,
-                    sustain: 0.8,
-                    release: 20,
+                    decay,
+                    sustain,
+                    release,
                 }),
         }),
     ]).map(

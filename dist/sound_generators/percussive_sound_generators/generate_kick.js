@@ -8,18 +8,23 @@ const generate_silence_1 = require("../generate_silence");
 const generate_sine_wave_1 = require("../pitched_sound_generators/generate_sine_wave");
 function generateKick(model) {
     const { durationMs, amplitudeProvider, sampleRate } = model;
+    const attack = 1;
+    const decay = 30;
+    const release = 20;
+    const sustain = 0.8;
+    const kickDuration = attack + decay + release;
     return (0, mix_sounds_1.mixSounds)([
         (0, generate_silence_1.generateSilence)({ durationMs, sampleRate }),
         (0, generate_sine_wave_1.generateSineWave)({
-            durationMs: 51,
+            durationMs: kickDuration,
             frequencyProvider: () => 80,
             sampleRate,
             amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
-                attack: 1,
+                attack,
                 currentTimeMs,
-                decay: 30,
-                sustain: 0.8,
-                release: 20,
+                decay,
+                sustain,
+                release,
             }),
         }),
     ]).map((x, i) => x *
