@@ -22,11 +22,13 @@ const audioData = {
                         sampleRate,
                         frequencyProvider: () => 440,
                         durationMs: 1000,
+                        amplitudeProvider: () => 1,
                     }),
                     generateTriangleWave({
                         sampleRate,
                         frequencyProvider: () => 600,
                         durationMs: 1500,
+                        amplitudeProvider: () => 1,
                     }),
                 ]),
                 cutoffGenerator: (currentTimeMs) =>
@@ -38,23 +40,27 @@ const audioData = {
                     sampleRate,
                     frequencyProvider: () => 440,
                     durationMs: 1000,
+                    amplitudeProvider: () => 1,
                 }),
                 generateTriangleWave({
                     sampleRate,
                     frequencyProvider: () => 600,
                     durationMs: 1500,
+                    amplitudeProvider: () => 1,
                 }),
             ]),
             generateSawtoothWave({
                 sampleRate,
                 frequencyProvider: () => 238,
                 durationMs: 1000,
+                amplitudeProvider: () => 1,
             }),
             lowPassFilter({
                 sound: generateSawtoothWave({
                     sampleRate,
                     frequencyProvider: () => 238,
                     durationMs: 1000,
+                    amplitudeProvider: () => 1,
                 }),
                 cutoffGenerator: () => 0.1,
                 sampleRate,
@@ -63,10 +69,19 @@ const audioData = {
                 sampleRate,
                 frequencyProvider: () => 60,
                 durationMs: 1000,
+                amplitudeProvider: () => 1,
             }),
-            generateWhiteNoise({ sampleRate, durationMs: 1000 }),
+            generateWhiteNoise({
+                sampleRate,
+                durationMs: 1000,
+                amplitudeProvider: () => 1,
+            }),
             lowPassFilter({
-                sound: generateWhiteNoise({ sampleRate, durationMs: 1000 }),
+                sound: generateWhiteNoise({
+                    sampleRate,
+                    durationMs: 1000,
+                    amplitudeProvider: () => 1,
+                }),
                 sampleRate,
                 cutoffGenerator: (currentTimeMs) =>
                     Math.max(0.5 - 0.0005 * currentTimeMs, 0),

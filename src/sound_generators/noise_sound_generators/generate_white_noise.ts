@@ -1,9 +1,16 @@
 import { generateSilence } from "../generate_silence";
 import { SoundGenerationModel } from "../models/sound_generation_model";
+import { callAmplitudeProvider } from "../utils/call_amplitude_provider";
 
 export function generateWhiteNoise(model: SoundGenerationModel): Float32Array {
-    const { durationMs, sampleRate } = model;
+    const { durationMs, sampleRate, amplitudeProvider } = model;
     return generateSilence({ durationMs, sampleRate }).map(
-        (x, i) => Math.random() - 0.5
+        (x, i) =>
+            callAmplitudeProvider({
+                amplitudeProvider,
+                sampleIndex: i,
+                sampleRate,
+            }) *
+            (Math.random() - 0.5)
     );
 }
