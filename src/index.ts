@@ -1,9 +1,9 @@
 import fs from "fs";
 import { join } from "path";
 import WavEncoder from "wav-encoder";
-import { concatSounds } from "./sound_data_manipulation/concat_sounds";
-import { lowPassFilter } from "./sound_data_manipulation/low_pass_filter";
-import { mixSounds } from "./sound_data_manipulation/mix_sounds";
+import { concatSounds } from "./sound_manipulation/concat_sounds";
+import { lowPassFilter } from "./sound_manipulation/low_pass_filter";
+import { mixSounds } from "./sound_manipulation/mix_sounds";
 import { generateWhiteNoise } from "./sound_generators/noise_sound_generators/generate_white_noise";
 import { generateSawtoothWave } from "./sound_generators/pitched_sound_generators/generate_sawtooth_wave";
 import { generateSineWave } from "./sound_generators/pitched_sound_generators/generate_sine_wave";
