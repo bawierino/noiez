@@ -32,12 +32,12 @@ const audioData = {
             (0, generate_sine_wave_1.generateSineWave)({
                 sampleRate: exports.sampleRate,
                 frequencyProvider: (currentTimeMs) => (0, slow_vibrato_1.slowVibrato)({ pitch: 440, currentTimeMs }),
-                durationMs: 2500,
+                durationMs: 3000,
                 amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
                     currentTimeMs,
-                    attack: 500,
-                    decay: 1500,
-                    sustain: 0.6,
+                    attack: 1000,
+                    decay: 1400,
+                    sustain: 0.4,
                     release: 300,
                 }),
             }),

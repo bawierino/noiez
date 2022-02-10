@@ -1,7 +1,3 @@
-amplitude modulation
-
-frequency modulation sounds
-
 bassdrum
 
 snare

@@ -20,13 +20,13 @@ const audioData = {
                 sampleRate,
                 frequencyProvider: (currentTimeMs) =>
                     slowVibrato({ pitch: 440, currentTimeMs }),
-                durationMs: 2500,
+                durationMs: 3000,
                 amplitudeProvider: (currentTimeMs) =>
                     adsr({
                         currentTimeMs,
-                        attack: 500,
-                        decay: 1500,
-                        sustain: 0.6,
+                        attack: 1000,
+                        decay: 1400,
+                        sustain: 0.4,
                         release: 300,
                     }),
             }),
