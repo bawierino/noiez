@@ -16,7 +16,9 @@ exports.sampleRate = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = require("path");
 const wav_encoder_1 = __importDefault(require("wav-encoder"));
+const generate_silence_1 = require("./sound_generators/generate_silence");
 const generate_white_noise_1 = require("./sound_generators/noise_sound_generators/generate_white_noise");
+const generate_kick_1 = require("./sound_generators/percussive_sound_generators/generate_kick");
 const generate_sawtooth_wave_1 = require("./sound_generators/pitched_sound_generators/generate_sawtooth_wave");
 const generate_sine_wave_1 = require("./sound_generators/pitched_sound_generators/generate_sine_wave");
 const generate_square_wave_1 = require("./sound_generators/pitched_sound_generators/generate_square_wave");
@@ -29,6 +31,27 @@ const audioData = {
     sampleRate: exports.sampleRate,
     channelData: [
         (0, concat_sounds_1.concatSounds)([
+            (0, generate_silence_1.generateSilence)({ durationMs: 100, sampleRate: exports.sampleRate }),
+            (0, generate_kick_1.generateKick)({
+                amplitudeProvider: () => 1,
+                durationMs: 500,
+                sampleRate: exports.sampleRate,
+            }),
+            (0, generate_kick_1.generateKick)({
+                amplitudeProvider: () => 1,
+                durationMs: 500,
+                sampleRate: exports.sampleRate,
+            }),
+            (0, generate_kick_1.generateKick)({
+                amplitudeProvider: () => 1,
+                durationMs: 500,
+                sampleRate: exports.sampleRate,
+            }),
+            (0, generate_kick_1.generateKick)({
+                amplitudeProvider: () => 1,
+                durationMs: 500,
+                sampleRate: exports.sampleRate,
+            }),
             (0, generate_sine_wave_1.generateSineWave)({
                 sampleRate: exports.sampleRate,
                 frequencyProvider: (currentTimeMs) => (0, slow_vibrato_1.slowVibrato)({ pitch: 440, currentTimeMs }),
