@@ -1,15 +1,14 @@
 import fs from "fs";
 import { join } from "path";
 import WavEncoder from "wav-encoder";
-import { concatSounds } from "./sound_manipulation/concat_sounds";
-import { lowPassFilter } from "./sound_manipulation/low_pass_filter";
-import { mixSounds } from "./sound_manipulation/mix_sounds";
 import { generateWhiteNoise } from "./sound_generators/noise_sound_generators/generate_white_noise";
 import { generateSawtoothWave } from "./sound_generators/pitched_sound_generators/generate_sawtooth_wave";
 import { generateSineWave } from "./sound_generators/pitched_sound_generators/generate_sine_wave";
 import { generateSquareWave } from "./sound_generators/pitched_sound_generators/generate_square_wave";
-import { generateTriangleWave } from "./sound_generators/pitched_sound_generators/generate_triangle_wave";
 import { adsr } from "./sound_manipulation/adsr";
+import { concatSounds } from "./sound_manipulation/concat_sounds";
+import { lowPassFilter } from "./sound_manipulation/low_pass_filter";
+import { slowVibrato } from "./sound_manipulation/slow_vibrato";
 
 export const sampleRate = 44100;
 
@@ -17,34 +16,26 @@ const audioData = {
     sampleRate,
     channelData: [
         concatSounds([
-            mixSounds([
-                generateSineWave({
-                    sampleRate,
-                    frequencyProvider: () => 440,
-                    durationMs: 3000,
-                    amplitudeProvider: (currentTimeMs) =>
-                        adsr({
-                            currentTimeMs,
-                            attack: 500,
-                            decay: 1500,
-                            sustain: 0.6,
-                            release: 300,
-                        }),
-                }),
-                generateTriangleWave({
-                    sampleRate,
-                    frequencyProvider: () => 440,
-                    durationMs: 3000,
-                    amplitudeProvider: (currentTimeMs) =>
-                        adsr({
-                            currentTimeMs,
-                            attack: 500,
-                            decay: 1500,
-                            sustain: 0.6,
-                            release: 300,
-                        }),
-                }),
-            ]),
+            generateSineWave({
+                sampleRate,
+                frequencyProvider: (currentTimeMs) =>
+                    slowVibrato({ pitch: 440, currentTimeMs }),
+                durationMs: 2500,
+                amplitudeProvider: (currentTimeMs) =>
+                    adsr({
+                        currentTimeMs,
+                        attack: 500,
+                        decay: 1500,
+                        sustain: 0.6,
+                        release: 300,
+                    }),
+            }),
+            generateSineWave({
+                sampleRate,
+                frequencyProvider: (currentTimeMs) => 440,
+                durationMs: 2300,
+                amplitudeProvider: (currentTimeMs) => 1,
+            }),
             generateSawtoothWave({
                 sampleRate,
                 frequencyProvider: () => 238,

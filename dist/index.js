@@ -16,46 +16,37 @@ exports.sampleRate = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = require("path");
 const wav_encoder_1 = __importDefault(require("wav-encoder"));
-const concat_sounds_1 = require("./sound_manipulation/concat_sounds");
-const low_pass_filter_1 = require("./sound_manipulation/low_pass_filter");
-const mix_sounds_1 = require("./sound_manipulation/mix_sounds");
 const generate_white_noise_1 = require("./sound_generators/noise_sound_generators/generate_white_noise");
 const generate_sawtooth_wave_1 = require("./sound_generators/pitched_sound_generators/generate_sawtooth_wave");
 const generate_sine_wave_1 = require("./sound_generators/pitched_sound_generators/generate_sine_wave");
 const generate_square_wave_1 = require("./sound_generators/pitched_sound_generators/generate_square_wave");
-const generate_triangle_wave_1 = require("./sound_generators/pitched_sound_generators/generate_triangle_wave");
 const adsr_1 = require("./sound_manipulation/adsr");
+const concat_sounds_1 = require("./sound_manipulation/concat_sounds");
+const low_pass_filter_1 = require("./sound_manipulation/low_pass_filter");
+const slow_vibrato_1 = require("./sound_manipulation/slow_vibrato");
 exports.sampleRate = 44100;
 const audioData = {
     sampleRate: exports.sampleRate,
     channelData: [
         (0, concat_sounds_1.concatSounds)([
-            (0, mix_sounds_1.mixSounds)([
-                (0, generate_sine_wave_1.generateSineWave)({
-                    sampleRate: exports.sampleRate,
-                    frequencyProvider: () => 440,
-                    durationMs: 3000,
-                    amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
-                        currentTimeMs,
-                        attack: 500,
-                        decay: 1500,
-                        sustain: 0.6,
-                        release: 300,
-                    }),
+            (0, generate_sine_wave_1.generateSineWave)({
+                sampleRate: exports.sampleRate,
+                frequencyProvider: (currentTimeMs) => (0, slow_vibrato_1.slowVibrato)({ pitch: 440, currentTimeMs }),
+                durationMs: 2500,
+                amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
+                    currentTimeMs,
+                    attack: 500,
+                    decay: 1500,
+                    sustain: 0.6,
+                    release: 300,
                 }),
-                (0, generate_triangle_wave_1.generateTriangleWave)({
-                    sampleRate: exports.sampleRate,
-                    frequencyProvider: () => 440,
-                    durationMs: 3000,
-                    amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
-                        currentTimeMs,
-                        attack: 500,
-                        decay: 1500,
-                        sustain: 0.6,
-                        release: 300,
-                    }),
-                }),
-            ]),
+            }),
+            (0, generate_sine_wave_1.generateSineWave)({
+                sampleRate: exports.sampleRate,
+                frequencyProvider: (currentTimeMs) => 440,
+                durationMs: 2300,
+                amplitudeProvider: (currentTimeMs) => 1,
+            }),
             (0, generate_sawtooth_wave_1.generateSawtoothWave)({
                 sampleRate: exports.sampleRate,
                 frequencyProvider: () => 238,
