@@ -42,7 +42,7 @@ const bassDrop = (0, generate_kick_1.generateKick)({
 });
 const snare = (0, generate_snare_1.generateSnare)({
     amplitudeProvider: () => 1,
-    durationMs: 500,
+    durationMs: 2000,
     sampleRate: exports.sampleRate,
 });
 const audioData = {
@@ -50,6 +50,7 @@ const audioData = {
     channelData: [
         (0, concat_sounds_1.concatSounds)([
             (0, generate_silence_1.generateSilence)({ durationMs: 100, sampleRate: exports.sampleRate }),
+            snare,
             tightKick,
             snare,
             tightKick,

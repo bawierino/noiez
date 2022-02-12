@@ -31,7 +31,7 @@ const bassDrop = generateKick({
 
 const snare = generateSnare({
     amplitudeProvider: () => 1,
-    durationMs: 500,
+    durationMs: 2000,
     sampleRate,
 });
 
@@ -40,7 +40,7 @@ const audioData = {
     channelData: [
         concatSounds([
             generateSilence({ durationMs: 100, sampleRate }),
-
+            snare,
             tightKick,
             snare,
             tightKick,
