@@ -9,8 +9,11 @@ export function lowPassFilter(model: {
     const result = new Float32Array(sound.length);
 
     sound.forEach((d, i) => {
-        const cutoff = cutoffGenerator(
-            getMsForSampleIndex({ sampleRate, sampleIndex: i })
+        const cutoff = Math.max(
+            cutoffGenerator(
+                getMsForSampleIndex({ sampleRate, sampleIndex: i })
+            ),
+            0
         );
         result[i] = (1 - cutoff) * (result?.[i - 1] ?? d) + d * cutoff;
     });

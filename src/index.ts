@@ -4,6 +4,7 @@ import WavEncoder from "wav-encoder";
 import { generateSilence } from "./sound_generators/generate_silence";
 import { generateWhiteNoise } from "./sound_generators/noise_sound_generators/generate_white_noise";
 import { generateKick } from "./sound_generators/percussive_sound_generators/generate_kick";
+import { generateSnare } from "./sound_generators/percussive_sound_generators/generate_snare";
 import { generateSawtoothWave } from "./sound_generators/pitched_sound_generators/generate_sawtooth_wave";
 import { generateSineWave } from "./sound_generators/pitched_sound_generators/generate_sine_wave";
 import { generateSquareWave } from "./sound_generators/pitched_sound_generators/generate_square_wave";
@@ -18,14 +19,20 @@ const tightKick = generateKick({
     amplitudeProvider: () => 1,
     durationMs: 500,
     sampleRate,
-    decay: 50,
+    decay: 69,
 });
 
-const bassdrop = generateKick({
+const bassDrop = generateKick({
     amplitudeProvider: () => 1,
     durationMs: 2000,
     sampleRate,
     decay: 1900,
+});
+
+const snare = generateSnare({
+    amplitudeProvider: () => 1,
+    durationMs: 500,
+    sampleRate,
 });
 
 const audioData = {
@@ -33,12 +40,17 @@ const audioData = {
     channelData: [
         concatSounds([
             generateSilence({ durationMs: 100, sampleRate }),
+
             tightKick,
+            snare,
             tightKick,
+            snare,
             tightKick,
+            snare,
             tightKick,
-            bassdrop,
-            bassdrop,
+            snare,
+            bassDrop,
+            bassDrop,
             generateSineWave({
                 sampleRate,
                 frequencyProvider: (currentTimeMs) =>

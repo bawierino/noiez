@@ -19,6 +19,7 @@ const wav_encoder_1 = __importDefault(require("wav-encoder"));
 const generate_silence_1 = require("./sound_generators/generate_silence");
 const generate_white_noise_1 = require("./sound_generators/noise_sound_generators/generate_white_noise");
 const generate_kick_1 = require("./sound_generators/percussive_sound_generators/generate_kick");
+const generate_snare_1 = require("./sound_generators/percussive_sound_generators/generate_snare");
 const generate_sawtooth_wave_1 = require("./sound_generators/pitched_sound_generators/generate_sawtooth_wave");
 const generate_sine_wave_1 = require("./sound_generators/pitched_sound_generators/generate_sine_wave");
 const generate_square_wave_1 = require("./sound_generators/pitched_sound_generators/generate_square_wave");
@@ -31,13 +32,18 @@ const tightKick = (0, generate_kick_1.generateKick)({
     amplitudeProvider: () => 1,
     durationMs: 500,
     sampleRate: exports.sampleRate,
-    decay: 50,
+    decay: 69,
 });
-const bassdrop = (0, generate_kick_1.generateKick)({
+const bassDrop = (0, generate_kick_1.generateKick)({
     amplitudeProvider: () => 1,
     durationMs: 2000,
     sampleRate: exports.sampleRate,
     decay: 1900,
+});
+const snare = (0, generate_snare_1.generateSnare)({
+    amplitudeProvider: () => 1,
+    durationMs: 500,
+    sampleRate: exports.sampleRate,
 });
 const audioData = {
     sampleRate: exports.sampleRate,
@@ -45,11 +51,15 @@ const audioData = {
         (0, concat_sounds_1.concatSounds)([
             (0, generate_silence_1.generateSilence)({ durationMs: 100, sampleRate: exports.sampleRate }),
             tightKick,
+            snare,
             tightKick,
+            snare,
             tightKick,
+            snare,
             tightKick,
-            bassdrop,
-            bassdrop,
+            snare,
+            bassDrop,
+            bassDrop,
             (0, generate_sine_wave_1.generateSineWave)({
                 sampleRate: exports.sampleRate,
                 frequencyProvider: (currentTimeMs) => (0, slow_vibrato_1.slowVibrato)({ pitch: 440, currentTimeMs }),
