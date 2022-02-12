@@ -9,7 +9,7 @@ const generate_silence_1 = require("../generate_silence");
 const generate_white_noise_1 = require("../noise_sound_generators/generate_white_noise");
 const generate_sine_wave_1 = require("../pitched_sound_generators/generate_sine_wave");
 function generateSnare(model) {
-    const { durationMs, amplitudeProvider, sampleRate, tone = 200, decay = 150, thiccness = 0.5, bottomVolume = 0.8, } = model;
+    const { durationMs, amplitudeProvider, sampleRate, tone = 200, decay = 145, thiccness = 0.33, bottomVolume = 0.8, } = model;
     const attack = 2;
     const bottomRelease = 10;
     const bottomDuration = attack + decay + bottomRelease;

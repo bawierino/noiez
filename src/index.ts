@@ -2,7 +2,6 @@ import fs from "fs";
 import { join } from "path";
 import WavEncoder from "wav-encoder";
 import { generateSilence } from "./sound_generators/generate_silence";
-import { generateWhiteNoise } from "./sound_generators/noise_sound_generators/generate_white_noise";
 import { generateKick } from "./sound_generators/percussive_sound_generators/generate_kick";
 import { generateSnare } from "./sound_generators/percussive_sound_generators/generate_snare";
 import { generateSawtoothWave } from "./sound_generators/pitched_sound_generators/generate_sawtooth_wave";
@@ -31,7 +30,7 @@ const bassDrop = generateKick({
 
 const snare = generateSnare({
     amplitudeProvider: () => 1,
-    durationMs: 2000,
+    durationMs: 500,
     sampleRate,
 });
 
@@ -40,6 +39,7 @@ const audioData = {
     channelData: [
         concatSounds([
             generateSilence({ durationMs: 100, sampleRate }),
+            tightKick,
             snare,
             tightKick,
             snare,
@@ -92,21 +92,6 @@ const audioData = {
                 frequencyProvider: () => 60,
                 durationMs: 1000,
                 amplitudeProvider: () => 1,
-            }),
-            generateWhiteNoise({
-                sampleRate,
-                durationMs: 1000,
-                amplitudeProvider: () => 1,
-            }),
-            lowPassFilter({
-                sound: generateWhiteNoise({
-                    sampleRate,
-                    durationMs: 1000,
-                    amplitudeProvider: () => 1,
-                }),
-                sampleRate,
-                cutoffGenerator: (currentTimeMs) =>
-                    Math.max(0.5 - 0.0005 * currentTimeMs, 0),
             }),
         ]),
     ],

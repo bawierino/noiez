@@ -17,7 +17,6 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = require("path");
 const wav_encoder_1 = __importDefault(require("wav-encoder"));
 const generate_silence_1 = require("./sound_generators/generate_silence");
-const generate_white_noise_1 = require("./sound_generators/noise_sound_generators/generate_white_noise");
 const generate_kick_1 = require("./sound_generators/percussive_sound_generators/generate_kick");
 const generate_snare_1 = require("./sound_generators/percussive_sound_generators/generate_snare");
 const generate_sawtooth_wave_1 = require("./sound_generators/pitched_sound_generators/generate_sawtooth_wave");
@@ -42,7 +41,7 @@ const bassDrop = (0, generate_kick_1.generateKick)({
 });
 const snare = (0, generate_snare_1.generateSnare)({
     amplitudeProvider: () => 1,
-    durationMs: 2000,
+    durationMs: 500,
     sampleRate: exports.sampleRate,
 });
 const audioData = {
@@ -50,6 +49,7 @@ const audioData = {
     channelData: [
         (0, concat_sounds_1.concatSounds)([
             (0, generate_silence_1.generateSilence)({ durationMs: 100, sampleRate: exports.sampleRate }),
+            tightKick,
             snare,
             tightKick,
             snare,
@@ -100,20 +100,6 @@ const audioData = {
                 frequencyProvider: () => 60,
                 durationMs: 1000,
                 amplitudeProvider: () => 1,
-            }),
-            (0, generate_white_noise_1.generateWhiteNoise)({
-                sampleRate: exports.sampleRate,
-                durationMs: 1000,
-                amplitudeProvider: () => 1,
-            }),
-            (0, low_pass_filter_1.lowPassFilter)({
-                sound: (0, generate_white_noise_1.generateWhiteNoise)({
-                    sampleRate: exports.sampleRate,
-                    durationMs: 1000,
-                    amplitudeProvider: () => 1,
-                }),
-                sampleRate: exports.sampleRate,
-                cutoffGenerator: (currentTimeMs) => Math.max(0.5 - 0.0005 * currentTimeMs, 0),
             }),
         ]),
     ],

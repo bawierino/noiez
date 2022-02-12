@@ -20,8 +20,8 @@ export function generateSnare(model: SnareSoundGenerationModel): Float32Array {
         amplitudeProvider,
         sampleRate,
         tone = 200,
-        decay = 150,
-        thiccness = 0.5,
+        decay = 145,
+        thiccness = 0.33,
         bottomVolume = 0.8,
     } = model;
 
