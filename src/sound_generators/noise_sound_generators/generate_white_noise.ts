@@ -1,5 +1,5 @@
 import { generateSilence } from "../generate_silence";
-import { SoundGenerationModel } from "../models/sound_generation_model";
+import { SoundGenerationModel } from "../sound_generation_model";
 import { callAmplitudeProvider } from "../utils/call_amplitude_provider";
 
 export function generateWhiteNoise(model: SoundGenerationModel): Float32Array {

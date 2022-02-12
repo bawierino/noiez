@@ -27,31 +27,29 @@ const concat_sounds_1 = require("./sound_manipulation/concat_sounds");
 const low_pass_filter_1 = require("./sound_manipulation/low_pass_filter");
 const slow_vibrato_1 = require("./sound_manipulation/slow_vibrato");
 exports.sampleRate = 44100;
+const tightKick = (0, generate_kick_1.generateKick)({
+    amplitudeProvider: () => 1,
+    durationMs: 500,
+    sampleRate: exports.sampleRate,
+    decay: 50,
+});
+const bassdrop = (0, generate_kick_1.generateKick)({
+    amplitudeProvider: () => 1,
+    durationMs: 2000,
+    sampleRate: exports.sampleRate,
+    decay: 1900,
+});
 const audioData = {
     sampleRate: exports.sampleRate,
     channelData: [
         (0, concat_sounds_1.concatSounds)([
             (0, generate_silence_1.generateSilence)({ durationMs: 100, sampleRate: exports.sampleRate }),
-            (0, generate_kick_1.generateKick)({
-                amplitudeProvider: () => 1,
-                durationMs: 500,
-                sampleRate: exports.sampleRate,
-            }),
-            (0, generate_kick_1.generateKick)({
-                amplitudeProvider: () => 1,
-                durationMs: 500,
-                sampleRate: exports.sampleRate,
-            }),
-            (0, generate_kick_1.generateKick)({
-                amplitudeProvider: () => 1,
-                durationMs: 500,
-                sampleRate: exports.sampleRate,
-            }),
-            (0, generate_kick_1.generateKick)({
-                amplitudeProvider: () => 1,
-                durationMs: 500,
-                sampleRate: exports.sampleRate,
-            }),
+            tightKick,
+            tightKick,
+            tightKick,
+            tightKick,
+            bassdrop,
+            bassdrop,
             (0, generate_sine_wave_1.generateSineWave)({
                 sampleRate: exports.sampleRate,
                 frequencyProvider: (currentTimeMs) => (0, slow_vibrato_1.slowVibrato)({ pitch: 440, currentTimeMs }),

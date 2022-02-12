@@ -1,5 +1,5 @@
 import { getMsForSampleIndex } from "../../utils/get_ms_for_sample";
-import { AmplitudeProvider } from "../models/sound_generation_model";
+import { AmplitudeProvider } from "../sound_generation_model";
 
 export function callAmplitudeProvider(model: {
     amplitudeProvider: AmplitudeProvider;

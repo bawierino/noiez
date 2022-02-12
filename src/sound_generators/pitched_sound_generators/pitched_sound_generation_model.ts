@@ -1,4 +1,4 @@
-import { SoundGenerationModel } from "./sound_generation_model";
+import { SoundGenerationModel } from "../sound_generation_model";
 
 export type FrequencyProvider = (currentTimeMs: number) => number;
 

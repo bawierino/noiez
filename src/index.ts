@@ -14,31 +14,31 @@ import { slowVibrato } from "./sound_manipulation/slow_vibrato";
 
 export const sampleRate = 44100;
 
+const tightKick = generateKick({
+    amplitudeProvider: () => 1,
+    durationMs: 500,
+    sampleRate,
+    decay: 50,
+});
+
+const bassdrop = generateKick({
+    amplitudeProvider: () => 1,
+    durationMs: 2000,
+    sampleRate,
+    decay: 1900,
+});
+
 const audioData = {
     sampleRate,
     channelData: [
         concatSounds([
             generateSilence({ durationMs: 100, sampleRate }),
-            generateKick({
-                amplitudeProvider: () => 1,
-                durationMs: 500,
-                sampleRate,
-            }),
-            generateKick({
-                amplitudeProvider: () => 1,
-                durationMs: 500,
-                sampleRate,
-            }),
-            generateKick({
-                amplitudeProvider: () => 1,
-                durationMs: 500,
-                sampleRate,
-            }),
-            generateKick({
-                amplitudeProvider: () => 1,
-                durationMs: 500,
-                sampleRate,
-            }),
+            tightKick,
+            tightKick,
+            tightKick,
+            tightKick,
+            bassdrop,
+            bassdrop,
             generateSineWave({
                 sampleRate,
                 frequencyProvider: (currentTimeMs) =>
