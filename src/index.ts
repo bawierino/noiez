@@ -18,7 +18,7 @@ const tightKick = generateKick({
     amplitudeProvider: () => 1,
     durationMs: 500,
     sampleRate,
-    decay: 69,
+    attack: 3,
 });
 
 const bassDrop = generateKick({
@@ -26,6 +26,7 @@ const bassDrop = generateKick({
     durationMs: 2000,
     sampleRate,
     decay: 1900,
+    attack: 7,
 });
 
 const snare = generateSnare({

@@ -7,6 +7,7 @@ import { SoundGenerationModel } from "../sound_generation_model";
 export interface KickSoundGenerationModel extends SoundGenerationModel {
     tone?: number;
     decay?: number;
+    attack?: number;
 }
 
 export function generateKick(model: KickSoundGenerationModel): Float32Array {
@@ -14,13 +15,13 @@ export function generateKick(model: KickSoundGenerationModel): Float32Array {
         durationMs,
         amplitudeProvider,
         sampleRate,
-        decay = 50,
-        tone = 80,
+        decay = 30,
+        tone = 64,
+        attack = 4,
     } = model;
 
-    const attack = 2;
-    const release = 20;
-    const sustain = 0.8;
+    const release = 5;
+    const sustain = 0.2;
     const kickDuration = attack + decay + release;
 
     return forceSoundLength({

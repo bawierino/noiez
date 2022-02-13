@@ -31,13 +31,14 @@ const tightKick = (0, generate_kick_1.generateKick)({
     amplitudeProvider: () => 1,
     durationMs: 500,
     sampleRate: exports.sampleRate,
-    decay: 69,
+    attack: 3,
 });
 const bassDrop = (0, generate_kick_1.generateKick)({
     amplitudeProvider: () => 1,
     durationMs: 2000,
     sampleRate: exports.sampleRate,
     decay: 1900,
+    attack: 7,
 });
 const snare = (0, generate_snare_1.generateSnare)({
     amplitudeProvider: () => 1,
