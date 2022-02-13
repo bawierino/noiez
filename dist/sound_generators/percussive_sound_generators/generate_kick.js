@@ -7,7 +7,7 @@ const get_ms_for_sample_1 = require("../../utils/get_ms_for_sample");
 const generate_sine_wave_1 = require("../pitched_sound_generators/generate_sine_wave");
 function generateKick(model) {
     const { durationMs, amplitudeProvider, sampleRate, decay = 30, tone = 64, attack = 4, } = model;
-    const release = 5;
+    const release = 10;
     const sustain = 0.2;
     const kickDuration = attack + decay + release;
     return (0, force_sound_length_1.forceSoundLength)({

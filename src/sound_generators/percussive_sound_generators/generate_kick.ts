@@ -20,7 +20,7 @@ export function generateKick(model: KickSoundGenerationModel): Float32Array {
         attack = 4,
     } = model;
 
-    const release = 5;
+    const release = 10;
     const sustain = 0.2;
     const kickDuration = attack + decay + release;
 
