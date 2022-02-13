@@ -42,9 +42,9 @@ function generateSnare(model) {
                             release: bottomRelease,
                         }),
                 }),
-            ]).map((x, i) => x *
-                amplitudeProvider((0, get_ms_for_sample_1.getMsForSampleIndex)({ sampleRate, sampleIndex: i }))),
-        }),
+            ]),
+        }).map((x, i) => x *
+            amplitudeProvider((0, get_ms_for_sample_1.getMsForSampleIndex)({ sampleRate, sampleIndex: i }))),
         durationMs,
         sampleRate,
     });

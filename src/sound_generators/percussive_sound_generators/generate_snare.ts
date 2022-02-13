@@ -62,14 +62,14 @@ export function generateSnare(model: SnareSoundGenerationModel): Float32Array {
                             release: bottomRelease,
                         }),
                 }),
-            ]).map(
-                (x, i) =>
-                    x *
-                    amplitudeProvider(
-                        getMsForSampleIndex({ sampleRate, sampleIndex: i })
-                    )
-            ),
-        }),
+            ]),
+        }).map(
+            (x, i) =>
+                x *
+                amplitudeProvider(
+                    getMsForSampleIndex({ sampleRate, sampleIndex: i })
+                )
+        ),
         durationMs,
         sampleRate,
     });
