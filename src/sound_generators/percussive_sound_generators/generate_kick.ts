@@ -1,7 +1,6 @@
 import { adsr } from "../../sound_manipulation/adsr";
-import { mixSounds } from "../../sound_manipulation/mix_sounds";
+import { forceSoundLength } from "../../sound_manipulation/force_sound_length";
 import { getMsForSampleIndex } from "../../utils/get_ms_for_sample";
-import { generateSilence } from "../generate_silence";
 import { generateSineWave } from "../pitched_sound_generators/generate_sine_wave";
 import { SoundGenerationModel } from "../sound_generation_model";
 
@@ -24,9 +23,8 @@ export function generateKick(model: KickSoundGenerationModel): Float32Array {
     const sustain = 0.8;
     const kickDuration = attack + decay + release;
 
-    return mixSounds([
-        generateSilence({ durationMs, sampleRate }),
-        generateSineWave({
+    return forceSoundLength({
+        sound: generateSineWave({
             durationMs: kickDuration,
             frequencyProvider: (currentTimeMs) =>
                 Math.max(tone - currentTimeMs / 100, 20),
@@ -39,12 +37,14 @@ export function generateKick(model: KickSoundGenerationModel): Float32Array {
                     sustain,
                     release,
                 }),
-        }),
-    ]).map(
-        (x, i) =>
-            x *
-            amplitudeProvider(
-                getMsForSampleIndex({ sampleRate, sampleIndex: i })
-            )
-    );
+        }).map(
+            (x, i) =>
+                x *
+                amplitudeProvider(
+                    getMsForSampleIndex({ sampleRate, sampleIndex: i })
+                )
+        ),
+        sampleRate,
+        durationMs,
+    });
 }

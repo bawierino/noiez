@@ -2,23 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateSnare = void 0;
 const adsr_1 = require("../../sound_manipulation/adsr");
+const force_sound_length_1 = require("../../sound_manipulation/force_sound_length");
 const low_pass_filter_1 = require("../../sound_manipulation/low_pass_filter");
 const mix_sounds_1 = require("../../sound_manipulation/mix_sounds");
 const get_ms_for_sample_1 = require("../../utils/get_ms_for_sample");
-const generate_silence_1 = require("../generate_silence");
 const generate_white_noise_1 = require("../noise_sound_generators/generate_white_noise");
 const generate_sine_wave_1 = require("../pitched_sound_generators/generate_sine_wave");
 function generateSnare(model) {
-    const { durationMs, amplitudeProvider, sampleRate, tone = 200, decay = 145, thiccness = 0.33, bottomVolume = 0.8, } = model;
+    const { durationMs, amplitudeProvider, sampleRate, tone = 200, decay = 150, thiccness = 0.33, bottomVolume = 0.8, } = model;
     const attack = 2;
     const bottomRelease = 10;
     const bottomDuration = attack + decay + bottomRelease;
-    return (0, mix_sounds_1.mixSounds)([
-        (0, low_pass_filter_1.lowPassFilter)({
+    return (0, force_sound_length_1.forceSoundLength)({
+        sound: (0, low_pass_filter_1.lowPassFilter)({
             cutoffGenerator: (currentTimeMs) => 1 - thiccness - currentTimeMs / 1000,
             sampleRate,
             sound: (0, mix_sounds_1.mixSounds)([
-                (0, generate_silence_1.generateSilence)({ durationMs, sampleRate }),
                 (0, generate_sine_wave_1.generateSineWave)({
                     durationMs: 62,
                     frequencyProvider: (currentTimeMs) => tone + currentTimeMs / 15,
@@ -43,9 +42,11 @@ function generateSnare(model) {
                             release: bottomRelease,
                         }),
                 }),
-            ]),
+            ]).map((x, i) => x *
+                amplitudeProvider((0, get_ms_for_sample_1.getMsForSampleIndex)({ sampleRate, sampleIndex: i }))),
         }),
-    ]).map((x, i) => x *
-        amplitudeProvider((0, get_ms_for_sample_1.getMsForSampleIndex)({ sampleRate, sampleIndex: i })));
+        durationMs,
+        sampleRate,
+    });
 }
 exports.generateSnare = generateSnare;

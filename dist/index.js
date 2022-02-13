@@ -43,6 +43,7 @@ const snare = (0, generate_snare_1.generateSnare)({
     amplitudeProvider: () => 1,
     durationMs: 500,
     sampleRate: exports.sampleRate,
+    decay: 150,
 });
 const audioData = {
     sampleRate: exports.sampleRate,

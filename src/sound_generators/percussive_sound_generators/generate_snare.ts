@@ -1,8 +1,8 @@
 import { adsr } from "../../sound_manipulation/adsr";
+import { forceSoundLength } from "../../sound_manipulation/force_sound_length";
 import { lowPassFilter } from "../../sound_manipulation/low_pass_filter";
 import { mixSounds } from "../../sound_manipulation/mix_sounds";
 import { getMsForSampleIndex } from "../../utils/get_ms_for_sample";
-import { generateSilence } from "../generate_silence";
 import { generateWhiteNoise } from "../noise_sound_generators/generate_white_noise";
 import { generateSineWave } from "../pitched_sound_generators/generate_sine_wave";
 import { SoundGenerationModel } from "../sound_generation_model";
@@ -20,7 +20,7 @@ export function generateSnare(model: SnareSoundGenerationModel): Float32Array {
         amplitudeProvider,
         sampleRate,
         tone = 200,
-        decay = 145,
+        decay = 150,
         thiccness = 0.33,
         bottomVolume = 0.8,
     } = model;
@@ -29,13 +29,12 @@ export function generateSnare(model: SnareSoundGenerationModel): Float32Array {
     const bottomRelease = 10;
     const bottomDuration = attack + decay + bottomRelease;
 
-    return mixSounds([
-        lowPassFilter({
+    return forceSoundLength({
+        sound: lowPassFilter({
             cutoffGenerator: (currentTimeMs) =>
                 1 - thiccness - currentTimeMs / 1000,
             sampleRate,
             sound: mixSounds([
-                generateSilence({ durationMs, sampleRate }),
                 generateSineWave({
                     durationMs: 62,
                     frequencyProvider: (currentTimeMs) =>
@@ -63,13 +62,15 @@ export function generateSnare(model: SnareSoundGenerationModel): Float32Array {
                             release: bottomRelease,
                         }),
                 }),
-            ]),
+            ]).map(
+                (x, i) =>
+                    x *
+                    amplitudeProvider(
+                        getMsForSampleIndex({ sampleRate, sampleIndex: i })
+                    )
+            ),
         }),
-    ]).map(
-        (x, i) =>
-            x *
-            amplitudeProvider(
-                getMsForSampleIndex({ sampleRate, sampleIndex: i })
-            )
-    );
+        durationMs,
+        sampleRate,
+    });
 }
