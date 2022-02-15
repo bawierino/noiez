@@ -24,9 +24,27 @@ const bubbub = Object.values(pitches).map((p) =>
     })
 );
 
+const ubub = Object.values(pitches)
+    .reverse()
+    .map((p) =>
+        generateSineWave({
+            amplitudeProvider: (currentTimeMs) =>
+                adsr({
+                    currentTimeMs,
+                    attack: 5,
+                    decay: 25,
+                    sustain: 0.5,
+                    release: 10,
+                }),
+            durationMs: 50,
+            frequencyProvider: () => p,
+            sampleRate,
+        })
+    );
+
 const audioData = {
     sampleRate,
-    channelData: [concatSounds(bubbub)],
+    channelData: [concatSounds(bubbub), concatSounds(ubub)],
 };
 
 WavEncoder.encode(audioData).then(async (buffer: ArrayBuffer) => {

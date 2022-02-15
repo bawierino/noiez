@@ -33,9 +33,23 @@ const bubbub = Object.values(pitch_1.pitches).map((p) => (0, generate_sine_wave_
     frequencyProvider: () => p,
     sampleRate: exports.sampleRate,
 }));
+const ubub = Object.values(pitch_1.pitches)
+    .reverse()
+    .map((p) => (0, generate_sine_wave_1.generateSineWave)({
+    amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
+        currentTimeMs,
+        attack: 5,
+        decay: 25,
+        sustain: 0.5,
+        release: 10,
+    }),
+    durationMs: 50,
+    frequencyProvider: () => p,
+    sampleRate: exports.sampleRate,
+}));
 const audioData = {
     sampleRate: exports.sampleRate,
-    channelData: [(0, concat_sounds_1.concatSounds)(bubbub)],
+    channelData: [(0, concat_sounds_1.concatSounds)(bubbub), (0, concat_sounds_1.concatSounds)(ubub)],
 };
 wav_encoder_1.default.encode(audioData).then((buffer) => __awaiter(void 0, void 0, void 0, function* () {
     const rendersFolderPath = (0, path_1.join)(__dirname, "..", "renders");
