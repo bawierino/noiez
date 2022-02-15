@@ -2,36 +2,47 @@ import fs from "fs";
 import { join } from "path";
 import WavEncoder from "wav-encoder";
 import { getNoteDuration, NoteDivision } from "./note_durations";
-import { pitches } from "./pitches";
-import { generateSineWave } from "./sound_generators/pitched_sound_generators/generate_sine_wave";
-import { adsr } from "./sound_manipulation/adsr";
+import { generateKick } from "./sound_generators/percussive_sound_generators/generate_kick";
+import { generateSnare } from "./sound_generators/percussive_sound_generators/generate_snare";
 import { concatSounds } from "./sound_manipulation/concat_sounds";
+import { mixSounds } from "./sound_manipulation/mix_sounds";
 
 export const sampleRate = 44100;
 
-const bubbub = Object.values(pitches).map((p) =>
-    generateSineWave({
-        amplitudeProvider: (currentTimeMs) =>
-            adsr({
-                currentTimeMs,
-                attack: 5,
-                decay: 25,
-                sustain: 0.5,
-                release: 10,
-            }),
-        durationMs: getNoteDuration({
-            bpm: 150,
-            noteDivision: NoteDivision.EIGHTH,
-            nTupletValue: 3,
-        }),
-        frequencyProvider: () => p,
-        sampleRate,
-    })
-);
+const kick = generateKick({
+    amplitudeProvider: () => 1,
+    durationMs: getNoteDuration({
+        bpm: 120,
+        noteDivision: NoteDivision.SIXTEENTH,
+    }),
+    sampleRate,
+});
+
+const snare = generateSnare({
+    amplitudeProvider: () => 1,
+    durationMs: getNoteDuration({
+        bpm: 120,
+        noteDivision: NoteDivision.QUARTER,
+    }),
+    sampleRate,
+});
 
 const audioData = {
     sampleRate,
-    channelData: [concatSounds(bubbub)],
+    channelData: [
+        concatSounds([
+            mixSounds([concatSounds([kick, kick, kick, kick]), snare]),
+            mixSounds([concatSounds([kick, kick, kick, kick]), snare]),
+            mixSounds([concatSounds([kick, kick, kick, kick]), snare]),
+            mixSounds([concatSounds([kick, kick, kick, kick]), snare]),
+            mixSounds([concatSounds([kick, kick, kick, kick]), snare]),
+            mixSounds([concatSounds([kick, kick, kick, kick]), snare]),
+            mixSounds([concatSounds([kick, kick, kick, kick]), snare]),
+            mixSounds([concatSounds([kick, kick, kick, kick]), snare]),
+            mixSounds([concatSounds([kick, kick, kick, kick]), snare]),
+            mixSounds([concatSounds([kick, kick, kick, kick]), snare]),
+        ]),
+    ],
 };
 
 WavEncoder.encode(audioData).then(async (buffer: ArrayBuffer) => {

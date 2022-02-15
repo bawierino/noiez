@@ -17,30 +17,43 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = require("path");
 const wav_encoder_1 = __importDefault(require("wav-encoder"));
 const note_durations_1 = require("./note_durations");
-const pitches_1 = require("./pitches");
-const generate_sine_wave_1 = require("./sound_generators/pitched_sound_generators/generate_sine_wave");
-const adsr_1 = require("./sound_manipulation/adsr");
+const generate_kick_1 = require("./sound_generators/percussive_sound_generators/generate_kick");
+const generate_snare_1 = require("./sound_generators/percussive_sound_generators/generate_snare");
 const concat_sounds_1 = require("./sound_manipulation/concat_sounds");
+const mix_sounds_1 = require("./sound_manipulation/mix_sounds");
 exports.sampleRate = 44100;
-const bubbub = Object.values(pitches_1.pitches).map((p) => (0, generate_sine_wave_1.generateSineWave)({
-    amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
-        currentTimeMs,
-        attack: 5,
-        decay: 25,
-        sustain: 0.5,
-        release: 10,
-    }),
+const kick = (0, generate_kick_1.generateKick)({
+    amplitudeProvider: () => 1,
     durationMs: (0, note_durations_1.getNoteDuration)({
-        bpm: 150,
-        noteDivision: note_durations_1.NoteDivision.EIGHTH,
-        nTupletValue: 3,
+        bpm: 120,
+        noteDivision: note_durations_1.NoteDivision.SIXTEENTH,
     }),
-    frequencyProvider: () => p,
     sampleRate: exports.sampleRate,
-}));
+});
+const snare = (0, generate_snare_1.generateSnare)({
+    amplitudeProvider: () => 1,
+    durationMs: (0, note_durations_1.getNoteDuration)({
+        bpm: 120,
+        noteDivision: note_durations_1.NoteDivision.QUARTER,
+    }),
+    sampleRate: exports.sampleRate,
+});
 const audioData = {
     sampleRate: exports.sampleRate,
-    channelData: [(0, concat_sounds_1.concatSounds)(bubbub)],
+    channelData: [
+        (0, concat_sounds_1.concatSounds)([
+            (0, mix_sounds_1.mixSounds)([(0, concat_sounds_1.concatSounds)([kick, kick, kick, kick]), snare]),
+            (0, mix_sounds_1.mixSounds)([(0, concat_sounds_1.concatSounds)([kick, kick, kick, kick]), snare]),
+            (0, mix_sounds_1.mixSounds)([(0, concat_sounds_1.concatSounds)([kick, kick, kick, kick]), snare]),
+            (0, mix_sounds_1.mixSounds)([(0, concat_sounds_1.concatSounds)([kick, kick, kick, kick]), snare]),
+            (0, mix_sounds_1.mixSounds)([(0, concat_sounds_1.concatSounds)([kick, kick, kick, kick]), snare]),
+            (0, mix_sounds_1.mixSounds)([(0, concat_sounds_1.concatSounds)([kick, kick, kick, kick]), snare]),
+            (0, mix_sounds_1.mixSounds)([(0, concat_sounds_1.concatSounds)([kick, kick, kick, kick]), snare]),
+            (0, mix_sounds_1.mixSounds)([(0, concat_sounds_1.concatSounds)([kick, kick, kick, kick]), snare]),
+            (0, mix_sounds_1.mixSounds)([(0, concat_sounds_1.concatSounds)([kick, kick, kick, kick]), snare]),
+            (0, mix_sounds_1.mixSounds)([(0, concat_sounds_1.concatSounds)([kick, kick, kick, kick]), snare]),
+        ]),
+    ],
 };
 wav_encoder_1.default.encode(audioData).then((buffer) => __awaiter(void 0, void 0, void 0, function* () {
     const rendersFolderPath = (0, path_1.join)(__dirname, "..", "renders");
