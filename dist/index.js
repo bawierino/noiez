@@ -16,95 +16,26 @@ exports.sampleRate = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = require("path");
 const wav_encoder_1 = __importDefault(require("wav-encoder"));
-const generate_silence_1 = require("./sound_generators/generate_silence");
-const generate_kick_1 = require("./sound_generators/percussive_sound_generators/generate_kick");
-const generate_snare_1 = require("./sound_generators/percussive_sound_generators/generate_snare");
-const generate_sawtooth_wave_1 = require("./sound_generators/pitched_sound_generators/generate_sawtooth_wave");
+const pitch_1 = require("./pitch");
 const generate_sine_wave_1 = require("./sound_generators/pitched_sound_generators/generate_sine_wave");
-const generate_square_wave_1 = require("./sound_generators/pitched_sound_generators/generate_square_wave");
 const adsr_1 = require("./sound_manipulation/adsr");
 const concat_sounds_1 = require("./sound_manipulation/concat_sounds");
-const low_pass_filter_1 = require("./sound_manipulation/low_pass_filter");
-const slow_vibrato_1 = require("./sound_manipulation/slow_vibrato");
 exports.sampleRate = 44100;
-const tightKick = (0, generate_kick_1.generateKick)({
-    amplitudeProvider: () => 1,
-    durationMs: 500,
+const bubbub = Object.values(pitch_1.pitches).map((p) => (0, generate_sine_wave_1.generateSineWave)({
+    amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
+        currentTimeMs,
+        attack: 5,
+        decay: 25,
+        sustain: 0.5,
+        release: 10,
+    }),
+    durationMs: 50,
+    frequencyProvider: () => p,
     sampleRate: exports.sampleRate,
-    attack: 3,
-});
-const bassDrop = (0, generate_kick_1.generateKick)({
-    amplitudeProvider: () => 1,
-    durationMs: 2000,
-    sampleRate: exports.sampleRate,
-    decay: 1900,
-    attack: 7,
-});
-const snare = (0, generate_snare_1.generateSnare)({
-    amplitudeProvider: () => 1,
-    durationMs: 500,
-    sampleRate: exports.sampleRate,
-    decay: 150,
-});
+}));
 const audioData = {
     sampleRate: exports.sampleRate,
-    channelData: [
-        (0, concat_sounds_1.concatSounds)([
-            (0, generate_silence_1.generateSilence)({ durationMs: 100, sampleRate: exports.sampleRate }),
-            tightKick,
-            snare,
-            tightKick,
-            snare,
-            tightKick,
-            snare,
-            tightKick,
-            snare,
-            tightKick,
-            snare,
-            bassDrop,
-            bassDrop,
-            (0, generate_sine_wave_1.generateSineWave)({
-                sampleRate: exports.sampleRate,
-                frequencyProvider: (currentTimeMs) => (0, slow_vibrato_1.slowVibrato)({ pitch: 440, currentTimeMs }),
-                durationMs: 3000,
-                amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
-                    currentTimeMs,
-                    attack: 1000,
-                    decay: 1400,
-                    sustain: 0.4,
-                    release: 300,
-                }),
-            }),
-            (0, generate_sine_wave_1.generateSineWave)({
-                sampleRate: exports.sampleRate,
-                frequencyProvider: (currentTimeMs) => 440,
-                durationMs: 2300,
-                amplitudeProvider: (currentTimeMs) => 1,
-            }),
-            (0, generate_sawtooth_wave_1.generateSawtoothWave)({
-                sampleRate: exports.sampleRate,
-                frequencyProvider: () => 238,
-                durationMs: 1000,
-                amplitudeProvider: () => 1,
-            }),
-            (0, low_pass_filter_1.lowPassFilter)({
-                sound: (0, generate_sawtooth_wave_1.generateSawtoothWave)({
-                    sampleRate: exports.sampleRate,
-                    frequencyProvider: () => 238,
-                    durationMs: 1000,
-                    amplitudeProvider: () => 1,
-                }),
-                cutoffGenerator: () => 0.1,
-                sampleRate: exports.sampleRate,
-            }),
-            (0, generate_square_wave_1.generateSquareWave)({
-                sampleRate: exports.sampleRate,
-                frequencyProvider: () => 60,
-                durationMs: 1000,
-                amplitudeProvider: () => 1,
-            }),
-        ]),
-    ],
+    channelData: [(0, concat_sounds_1.concatSounds)(bubbub)],
 };
 wav_encoder_1.default.encode(audioData).then((buffer) => __awaiter(void 0, void 0, void 0, function* () {
     const rendersFolderPath = (0, path_1.join)(__dirname, "..", "renders");
