@@ -16,12 +16,13 @@ exports.sampleRate = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = require("path");
 const wav_encoder_1 = __importDefault(require("wav-encoder"));
-const pitch_1 = require("./pitch");
+const note_durations_1 = require("./note_durations");
+const pitches_1 = require("./pitches");
 const generate_sine_wave_1 = require("./sound_generators/pitched_sound_generators/generate_sine_wave");
 const adsr_1 = require("./sound_manipulation/adsr");
 const concat_sounds_1 = require("./sound_manipulation/concat_sounds");
 exports.sampleRate = 44100;
-const bubbub = Object.values(pitch_1.pitches).map((p) => (0, generate_sine_wave_1.generateSineWave)({
+const bubbub = Object.values(pitches_1.pitches).map((p) => (0, generate_sine_wave_1.generateSineWave)({
     amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
         currentTimeMs,
         attack: 5,
@@ -29,27 +30,17 @@ const bubbub = Object.values(pitch_1.pitches).map((p) => (0, generate_sine_wave_
         sustain: 0.5,
         release: 10,
     }),
-    durationMs: 50,
-    frequencyProvider: () => p,
-    sampleRate: exports.sampleRate,
-}));
-const ubub = Object.values(pitch_1.pitches)
-    .reverse()
-    .map((p) => (0, generate_sine_wave_1.generateSineWave)({
-    amplitudeProvider: (currentTimeMs) => (0, adsr_1.adsr)({
-        currentTimeMs,
-        attack: 5,
-        decay: 25,
-        sustain: 0.5,
-        release: 10,
+    durationMs: (0, note_durations_1.getNoteDuration)({
+        bpm: 150,
+        noteDivision: note_durations_1.NoteDivision.EIGHTH,
+        nTupletValue: 3,
     }),
-    durationMs: 50,
     frequencyProvider: () => p,
     sampleRate: exports.sampleRate,
 }));
 const audioData = {
     sampleRate: exports.sampleRate,
-    channelData: [(0, concat_sounds_1.concatSounds)(bubbub), (0, concat_sounds_1.concatSounds)(ubub)],
+    channelData: [(0, concat_sounds_1.concatSounds)(bubbub)],
 };
 wav_encoder_1.default.encode(audioData).then((buffer) => __awaiter(void 0, void 0, void 0, function* () {
     const rendersFolderPath = (0, path_1.join)(__dirname, "..", "renders");
